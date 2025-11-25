@@ -1,7 +1,7 @@
-// src/assets/services/api.js
+
 import axios from "axios";
 
-// For production, use relative path. For development, use localhost
+
 const baseURL = import.meta.env.PROD 
   ? "/api" 
   : import.meta.env.VITE_API_URL || "http://localhost:5000/api";

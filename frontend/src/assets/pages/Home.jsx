@@ -1,4 +1,4 @@
-// src/assets/pages/Home.jsx
+
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useState, useEffect } from "react";

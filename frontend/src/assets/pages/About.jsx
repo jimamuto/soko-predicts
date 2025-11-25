@@ -1,4 +1,4 @@
-// src/assets/pages/About.jsx
+
 import { motion } from "framer-motion";
 import { BarChart3, Users, Target, Globe, Shield, Zap, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";

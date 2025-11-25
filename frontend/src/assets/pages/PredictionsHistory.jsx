@@ -1,4 +1,4 @@
-// src/assets/pages/PredictionsHistory.jsx
+
 import { useEffect, useState } from "react";
 import { getPredictions } from "../services/api";
 import EmptyState from "../components/EmptyState";

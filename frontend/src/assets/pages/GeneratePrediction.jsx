@@ -1,4 +1,4 @@
-// src/assets/pages/GeneratePrediction.jsx
+
 import { useState } from "react";
 import { createPrediction } from "../services/api";
 import toast from "react-hot-toast";
