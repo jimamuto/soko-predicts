@@ -1,44 +1,33 @@
+// server.js
 const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const path = require('path');
-require('dotenv').config();
-
 const predictionRoutes = require('./routes/prediction.routes');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const path = require('path');
+const mongoose = require('mongoose');
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
 
-// Middleware
+// MIDDLEWARE
+
+// Parse JSON
+app.use(express.json());
+
+// CORS 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: "*",
   credentials: true,
 }));
 
-app.use(express.json());
-
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+  .then(() => console.log('Connected to MongoDB!'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
+// API ROUTES
 app.use('/api/predictions', predictionRoutes);
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
-    message: 'SokoPredicts API is running',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// PRODUCTION: Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   // Path to the built React frontend
   const distPath = path.join(__dirname, "../frontend/dist");
@@ -46,14 +35,15 @@ if (process.env.NODE_ENV === "production") {
   // Serve static files
   app.use(express.static(distPath));
 
-  // SPA fallback - serve index.html for all unknown routes
-  app.get("*", (req, res) => {
+  // SPA fallback 
+  app.use((req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
   });
 }
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 // Starts your server
 
