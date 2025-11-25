@@ -28,6 +28,11 @@ mongoose.connect(process.env.MONGODB_URI)
 // API ROUTES
 app.use('/api/predictions', predictionRoutes);
 
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' });
+});
+
 if (process.env.NODE_ENV === "production") {
   // Path to the built React frontend
   const distPath = path.join(__dirname, "../frontend/dist");
