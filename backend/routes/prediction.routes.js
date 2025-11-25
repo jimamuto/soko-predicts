@@ -11,10 +11,9 @@ router.get('/health', (req, res) => {
     });
 });
 //router for asking for  predictions
-router.post('/predict',createPrediction);
-
-//router for getting predictions
-router.get('/get-predictions',getPredictions);
+router.post('/', createPrediction); 
+//router for getting all predictions
+router.get('/', getPredictions);    
 
 
 
