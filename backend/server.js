@@ -1,6 +1,8 @@
 // server.js
 const express = require('express');
 const predictionRoutes = require('./routes/prediction.routes');
+const newsRoutes = require('./routes/market-news');
+const insightsRoutes = require('./routes/insights');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
@@ -27,7 +29,8 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // API ROUTES
 app.use('/api/predictions', predictionRoutes);
-
+app.use('/api', insightsRoutes);
+app.use('/api', newsRoutes);
 // Health check route
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });

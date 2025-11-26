@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { BarChart3, Users, Target, Globe, Shield, Zap, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -100,7 +99,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Mission Section */}
+      {/* Mission & Vision */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -108,9 +107,7 @@ export default function About() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Our Mission
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Mission</h2>
               <p className="text-lg text-gray-600 mb-6">
                 SokoPredicts is dedicated to transforming agricultural commodity trading 
                 through cutting-edge artificial intelligence and comprehensive data analysis. 
@@ -163,9 +160,7 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Our sophisticated platform combines multiple data streams and advanced algorithms 
               to deliver accurate price predictions.
@@ -181,18 +176,14 @@ export default function About() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all"
               >
-                <div className="text-blue-600 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
+                <div className="text-blue-600 mb-4">{feature.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
 
-          {/* Process Flow */}
+          {/* Prediction Process */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -200,103 +191,72 @@ export default function About() {
             className="mt-16 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm"
           >
             <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">Our Prediction Process</h3>
-            <div className="grid md:grid-cols-4 gap-6 text-center">
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-lg font-bold">1</div>
-                <h4 className="font-semibold text-gray-900">Data Collection</h4>
-                <p className="text-sm text-gray-600">Gather real-time market, weather, and news data</p>
-              </div>
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto text-lg font-bold">2</div>
-                <h4 className="font-semibold text-gray-900">Analysis</h4>
-                <p className="text-sm text-gray-600">AI processes multiple data sources simultaneously</p>
-              </div>
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto text-lg font-bold">3</div>
-                <h4 className="font-semibold text-gray-900">Prediction</h4>
-                <p className="text-sm text-gray-600">Machine learning models generate price forecasts</p>
-              </div>
-              <div className="space-y-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-lg font-bold">4</div>
-                <h4 className="font-semibold text-gray-900">Delivery</h4>
-                <p className="text-sm text-gray-600">Clear, actionable insights delivered to you</p>
-              </div>
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {["Data Collection", "Analysis", "Prediction", "Delivery"].map((step, idx) => (
+                <div key={idx} className="space-y-3">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto text-lg font-bold text-white
+                    ${idx % 2 === 0 ? "bg-gradient-to-br from-blue-500 to-blue-600" : "bg-gradient-to-br from-purple-500 to-purple-600"}`}
+                  >
+                    {idx + 1}
+                  </div>
+                  <h4 className="font-semibold text-gray-900">{step}</h4>
+                  <p className="text-sm text-gray-600">
+                    {{
+                      0: "Gather real-time market, weather, and news data",
+                      1: "AI processes multiple data sources simultaneously",
+                      2: "Machine learning models generate price forecasts",
+                      3: "Clear, actionable insights delivered to you"
+                    }[idx]}
+                  </p>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Supported Commodities & Markets */}
+      {/* Commodities & Markets */}
       <section className="py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Commodities */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm"
-            >
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Supported Commodities</h3>
-              <div className="flex flex-wrap gap-2">
-                {supportedCommodities.map((commodity, index) => (
-                  <span key={index} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm border border-gray-200">
-                    {commodity}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
+        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8">
+          {/* Commodities */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Supported Commodities</h3>
+            <div className="flex flex-wrap gap-2">
+              {supportedCommodities.map((c, i) => (
+                <span key={i} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm border border-gray-200">{c}</span>
+              ))}
+            </div>
+          </motion.div>
 
-            {/* Markets */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm"
-            >
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Covered Markets</h3>
-              <div className="flex flex-wrap gap-2">
-                {supportedMarkets.map((market, index) => (
-                  <span key={index} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm border border-gray-200">
-                    {market}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          </div>
+          {/* Markets */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Covered Markets</h3>
+            <div className="flex flex-wrap gap-2">
+              {supportedMarkets.map((m, i) => (
+                <span key={i} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm border border-gray-200">{m}</span>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Team Section */}
       <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Expertise
-            </h2>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Expertise</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Behind SokoPredicts is a dedicated team of experts committed to delivering 
               the most accurate and reliable predictions.
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-center"
-              >
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {team.map((member, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-center">
                 <Users className="w-12 h-12 text-blue-600 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900">{member.name}</h3>
-                <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium inline-block mt-2">
-                  {member.role}
-                </div>
+                <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium inline-block mt-2">{member.role}</div>
                 <p className="text-gray-600 mt-3 text-sm">{member.description}</p>
               </motion.div>
             ))}
@@ -307,39 +267,17 @@ export default function About() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-gray-900 to-gray-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold text-white mb-6"
-          >
-            Ready to Make Smarter Decisions?
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
-          >
+          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Make Smarter Decisions?</motion.h2>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Join thousands of farmers and traders who trust SokoPredicts for their 
             agricultural commodity price predictions.
           </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <Link
-              to="/predict"
-              className="bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all flex items-center justify-center space-x-2"
-            >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/predict" className="bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all flex items-center justify-center space-x-2 focus:outline-none">
               <span>Start Predicting Now</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              to="/history"
-              className="bg-transparent border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all"
-            >
+            <Link to="/history" className="bg-transparent border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all focus:outline-none">
               View Predictions
             </Link>
           </motion.div>

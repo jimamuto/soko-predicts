@@ -18,8 +18,11 @@ const PredictionSchema = new mongoose.Schema({
         weatherImpact: { type: Number, default: 0 },
         marketSentiment: { type: Number, default: 0 },
         fuelCostImpact: { type: Number, default: 0 },
-        currencyImpact: { type: Number, default: 0 }
+        currencyImpact: { type: Number, default: 0 },
+        aiAnalysis: { type: String, default: '' } // <- optional AI insight storage
     },
+    reasoning: { type: String, default: '' }, // <- store AI reasoning directly
+    aiEnhanced: { type: Boolean, default: false }, // <- marks if AI enhanced
     timestamp: { type: Date, default: Date.now },
     lastUpdated: { type: Date, default: Date.now }
 });

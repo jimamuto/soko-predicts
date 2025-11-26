@@ -1,15 +1,39 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPrediction } from "../services/api";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { TrendingUp, TrendingDown, Minus, Loader, X, BarChart3, ArrowRight, Zap, Shield, Calendar, MapPin, Package } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Loader, X, BarChart3, ArrowRight, Zap, Shield, Calendar, MapPin, Package, Brain } from "lucide-react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 }
+};
+
+// Typing Animation Component
+const Typewriter = ({ text, speed = 30 }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text, speed]);
+
+  useEffect(() => {
+    // Reset when text changes
+    setDisplayText('');
+    setCurrentIndex(0);
+  }, [text]);
+
+  return <span>{displayText}</span>;
 };
 
 export default function GeneratePrediction() {
@@ -20,6 +44,7 @@ export default function GeneratePrediction() {
     market: "",
     timeframe: "1 week"
   });
+  const [showTyping, setShowTyping] = useState(false);
 
   const popularCommodities = [
     { value: "maize", label: "Maize", icon: "🌽" },
@@ -65,11 +90,16 @@ export default function GeneratePrediction() {
     }
 
     setLoading(true);
+    setShowTyping(false);
     
     try {
+      // USE YOUR ACTUAL GROQ API
       const res = await createPrediction(formData);
       setResult(res.data.prediction);
-      toast.success("Prediction generated successfully!");
+      
+      // Start typing animation after a brief delay
+      setTimeout(() => setShowTyping(true), 500);
+      toast.success("🎯 AI Prediction Generated!");
     } catch (err) {
       console.error("Prediction error:", err);
       const errorMessage = err.response?.data?.error || "Failed to generate prediction. Please try again.";
@@ -80,6 +110,7 @@ export default function GeneratePrediction() {
 
   const handleNewPrediction = () => {
     setResult(null);
+    setShowTyping(false);
     setFormData({
       commodity: "",
       market: "",
@@ -120,20 +151,31 @@ export default function GeneratePrediction() {
                 animate={{ opacity: 1, y: 0 }}
                 className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full px-4 py-2 mb-4"
               >
-                <Zap className="w-4 h-4 text-white" />
-                <span className="text-sm text-white font-medium">Prediction Complete</span>
+                <Brain className="w-4 h-4 text-white" />
+                <span className="text-sm text-white font-medium">
+                  {result.aiEnhanced ? '🤖 AI-Enhanced Prediction Complete' : 'Prediction Complete'}
+                </span>
               </motion.div>
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                 Prediction Results
               </h1>
               <p className="text-gray-600 text-lg">Analysis for {result.commodity} in {result.market}</p>
             </div>
-            <button 
-              onClick={handleNewPrediction}
-              className="bg-gray-100 hover:bg-gray-200 rounded-lg p-3 transition-colors group"
-            >
-              <X className="w-5 h-5 text-gray-600 group-hover:text-gray-800" />
-            </button>
+            <div className="flex items-center gap-4">
+              {/* AI Badge */}
+              {result.aiEnhanced && (
+                <div className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full text-white text-sm font-semibold animate-pulse">
+                  <Brain className="w-3 h-3" />
+                  <span>AI Enhanced</span>
+                </div>
+              )}
+              <button 
+                onClick={handleNewPrediction}
+                className="bg-gray-100 hover:bg-gray-200 rounded-lg p-3 transition-colors group"
+              >
+                <X className="w-5 h-5 text-gray-600 group-hover:text-gray-800" />
+              </button>
+            </div>
           </motion.div>
 
           {/* Results Grid */}
@@ -148,7 +190,14 @@ export default function GeneratePrediction() {
               >
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 capitalize mb-2">{result.commodity}</h2>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h2 className="text-2xl font-bold text-gray-900 capitalize">{result.commodity}</h2>
+                      {result.aiEnhanced && (
+                        <div className="flex items-center gap-1 text-purple-600 animate-bounce">
+                          <Brain className="w-5 h-5" />
+                        </div>
+                      )}
+                    </div>
                     <p className="text-gray-600 text-lg">{result.market} Market</p>
                   </div>
                   <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${getTrendColor(result.trend)}`}>
@@ -158,6 +207,48 @@ export default function GeneratePrediction() {
                     </span>
                   </div>
                 </div>
+                
+                {/* AI Insight Section - ALWAYS SHOW */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl shadow-sm"
+                >
+                  <div className="flex items-center gap-2 text-blue-800 mb-3">
+                    <Brain className="w-4 h-4" />
+                    <span className="font-semibold">🧠 AI Market Insight</span>
+                    <div className="flex space-x-1 ml-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-blue-700 text-sm leading-relaxed min-h-[60px] bg-white/50 rounded-lg p-3 border">
+                    {result.reasoning ? (
+                      showTyping ? (
+                        <Typewriter 
+                          text={result.reasoning} 
+                          speed={20} 
+                        />
+                      ) : (
+                        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                      )
+                    ) : (
+                      <p className="text-gray-500 italic">
+                        No AI analysis available for this prediction. Using standard market analysis.
+                      </p>
+                    )}
+                  </div>
+                  
+                  {result.factors?.aiAnalysis && (
+                    <div className="mt-3 flex items-center gap-2 text-xs text-blue-600 bg-white/70 rounded-full px-3 py-1 w-fit">
+                      <span className="font-semibold">🎯 Key Factor:</span>
+                      <span>{result.factors.aiAnalysis}</span>
+                    </div>
+                  )}
+                </motion.div>
                 
                 {/* Market & Timeframe Info */}
                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
@@ -219,11 +310,11 @@ export default function GeneratePrediction() {
                       <span className="text-sm text-gray-500">Price movement</span>
                     </div>
                     <span className={`text-2xl font-bold ${
-                      result.predictedChangePercent >= 0 
+                      parseFloat(result.predictedChangePercent) >= 0 
                         ? 'text-green-600' 
                         : 'text-red-600'
                     }`}>
-                      {result.predictedChangePercent >= 0 ? '+' : ''}{result.predictedChangePercent}%
+                      {parseFloat(result.predictedChangePercent) >= 0 ? '+' : ''}{result.predictedChangePercent}%
                     </span>
                   </div>
                 </div>
@@ -242,15 +333,20 @@ export default function GeneratePrediction() {
                 <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center justify-center space-x-3">
                   <Shield className="w-6 h-6 text-gray-700" />
                   <span>Confidence Score</span>
+                  {result.aiEnhanced && (
+                    <Brain className="w-5 h-5 text-purple-500 animate-pulse" />
+                  )}
                 </h3>
                 
-                <p className="text-gray-600 mb-6">How reliable this prediction is</p>
+                <p className="text-gray-600 mb-6">
+                  {result.aiEnhanced ? '🤖 AI-Enhanced Reliability' : 'Prediction Reliability'}
+                </p>
                 
                 <div className="relative inline-block mb-6">
                   <div 
                     className="radial-progress text-gray-900 border-4 border-gray-200" 
                     style={{
-                      "--value": result.confidenceScore * 100, 
+                      "--value": (result.confidenceScore * 100).toFixed(0), 
                       "--size": "8rem", 
                       "--thickness": "8px"
                     }}
@@ -270,7 +366,66 @@ export default function GeneratePrediction() {
                   <span className="font-semibold">
                     {result.confidenceScore > 0.7 ? 'High Reliability' : 
                      result.confidenceScore > 0.5 ? 'Moderate Reliability' : 'Low Reliability'}
+                    {result.aiEnhanced && ' 🚀'}
                   </span>
+                </div>
+
+                {/* AI Confidence Boost Indicator */}
+                {result.aiEnhanced && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1 }}
+                    className="mt-4 p-2 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200"
+                  >
+                    <p className="text-xs text-green-600 font-medium">
+                      ⚡ AI boosted prediction confidence
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              {/* Data Sources - UPDATED TO ALWAYS SHOW */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm"
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4">📊 Data Sources</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600 font-medium">Price Data:</span>
+                    <span className="font-semibold text-gray-900 bg-blue-50 px-3 py-1 rounded-full text-sm">
+                      {result.dataSources?.price || "Kenya National Bureau of Statistics"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600 font-medium">Weather:</span>
+                    <span className="font-semibold text-gray-900 bg-green-50 px-3 py-1 rounded-full text-sm">
+                      {result.dataSources?.weather || "Weather API"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600 font-medium">News:</span>
+                    <span className="font-semibold text-gray-900 bg-yellow-50 px-3 py-1 rounded-full text-sm">
+                      {result.dataSources?.news || "Market News"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600 font-medium">Fuel Prices:</span>
+                    <span className="font-semibold text-gray-900 bg-red-50 px-3 py-1 rounded-full text-sm">
+                      {result.dataSources?.fuel || "Energy Regulatory Commission"}
+                    </span>
+                  </div>
+                  {result.aiEnhanced && (
+                    <div className="flex justify-between items-center py-2 pt-4 border-t border-gray-100">
+                      <span className="text-gray-600 font-medium">AI Analysis:</span>
+                      <span className="font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full text-sm">
+                        🧠 Groq AI
+                      </span>
+                    </div>
+                  )}
                 </div>
               </motion.div>
 
@@ -278,14 +433,14 @@ export default function GeneratePrediction() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.4 }}
                 className="space-y-4"
               >
                 <button 
                   onClick={handleNewPrediction}
-                  className="w-full bg-white border border-gray-300 text-gray-900 px-6 py-4 rounded-xl font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center space-x-3 group shadow-sm"
+                  className="w-full bg-white border border-gray-300 text-gray-900 px-6 py-4 rounded-xl font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center space-x-3 group shadow-sm hover:shadow-md"
                 >
-                  <span>New Prediction</span>
+                  <span>🔄 New Prediction</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 
@@ -293,7 +448,7 @@ export default function GeneratePrediction() {
                   to="/history"
                   className="w-full border border-gray-300 text-gray-700 px-6 py-4 rounded-xl font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center space-x-3"
                 >
-                  <span>View History</span>
+                  <span>📈 View History</span>
                   <BarChart3 className="w-5 h-5" />
                 </Link>
               </motion.div>
@@ -319,7 +474,7 @@ export default function GeneratePrediction() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full px-4 py-2 mb-6"
           >
-            <Zap className="w-4 h-4 text-white" />
+            <Brain className="w-4 h-4 text-white" />
             <span className="text-sm text-white font-medium">AI-powered predictions</span>
           </motion.div>
 

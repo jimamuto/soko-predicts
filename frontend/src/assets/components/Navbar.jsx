@@ -1,46 +1,78 @@
 import { Link } from "react-router-dom";
+import { Menu, Search } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="navbar bg-base-100 shadow">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/predict">Generate</Link></li>
-            <li><Link to="/history">History</Link></li>
-            <li><Link to="/about">About</Link></li>
-          </ul>
+    <nav className="bg-neutral text-neutral-content shadow-md sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold hover:text-white transition-colors">
+          SokoPredicts
+        </Link>
+
+        {/* Desktop Links */}
+        <ul className="hidden md:flex space-x-6 font-medium text-gray-200">
+          <li>
+            <Link to="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/predict" className="hover:text-white transition-colors">
+              Generate
+            </Link>
+          </li>
+          <li>
+            <Link to="/history" className="hover:text-white transition-colors">
+              History
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" className="hover:text-white transition-colors">
+              About
+            </Link>
+          </li>
+        </ul>
+
+        {/* Mobile Menu & Search */}
+        <div className="flex items-center space-x-4">
+          <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+            <Menu className="w-6 h-6 text-gray-200 hover:text-white transition-colors" />
+          </button>
+          <button>
+            <Search className="w-5 h-5 text-gray-200 hover:text-white transition-colors" />
+          </button>
         </div>
       </div>
 
-      <div className="navbar-center">
-        <Link to="/" className="btn btn-ghost text-xl">SokoPredicts</Link>
-      </div>
-
-      <div className="navbar-end">
-        <button className="btn btn-ghost btn-circle">
-          {/* search icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-      </div>
-    </div>
+      {/* Mobile Dropdown */}
+      {isOpen && (
+        <ul className="md:hidden bg-neutral text-neutral-content flex flex-col px-6 py-4 space-y-2 shadow-lg">
+          <li>
+            <Link to="/" className="hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/predict" className="hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+              Generate
+            </Link>
+          </li>
+          <li>
+            <Link to="/history" className="hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+              History
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" className="hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+              About
+            </Link>
+          </li>
+        </ul>
+      )}
+    </nav>
   );
 }

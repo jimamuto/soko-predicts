@@ -35,8 +35,17 @@ const createPrediction = async (req, res) => {
 
         // Save to database
         const savedPrediction = await Prediction.create({
-            ...predictionResult,
-            userInput: { commodity, market, timeframe },
+            commodity,
+            market,
+            timeframe,
+            trend: predictionResult.trend,
+            currentPrice: predictionResult.currentPrice,
+            predictedPrice: predictionResult.predictedPrice,
+            predictedChangePercent: predictionResult.predictedChangePercent,
+            confidenceScore: predictionResult.confidenceScore,
+            reasoning: predictionResult.reasoning,
+            aiEnhanced: predictionResult.aiEnhanced,
+            factors: predictionResult.factors,
             createdAt: new Date()
         });
 
@@ -44,7 +53,20 @@ const createPrediction = async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'Prediction generated successfully',
-            prediction: savedPrediction
+            prediction: {
+                commodity: savedPrediction.commodity,
+                market: savedPrediction.market,
+                timeframe: savedPrediction.timeframe,
+                trend: savedPrediction.trend,
+                currentPrice: savedPrediction.currentPrice,
+                predictedPrice: savedPrediction.predictedPrice,
+                predictedChangePercent: savedPrediction.predictedChangePercent,
+                confidenceScore: savedPrediction.confidenceScore,
+                reasoning: savedPrediction.reasoning,
+                aiEnhanced: savedPrediction.aiEnhanced,
+                factors: savedPrediction.factors,
+                createdAt: savedPrediction.createdAt
+            }
         });
 
     } catch (error) {

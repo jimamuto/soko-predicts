@@ -1,2 +1,42 @@
+# Dependencies
 node_modules
+/.pnp
+.pnp.js
+.pnp.loader.mjs
+
+# Hugging Face cache and models
+.huggingface/
+.cache/
+.cache/huggingface/
+.cache/huggingface/hub/
+.cache/torch/
+.cache/huggingface/transformers/
+
+# Model files (usually very large)
+*.bin
+*.safetensors
+*.pth
+*.pt
+*.ckpt
+
+# Hugging Face specific
+**/models--*
+**/snapshots/
+
+# PyTorch and TensorFlow
+.cache/torch/
+.cache/tensorflow/
+
+# Jupyter and Python
+.ipynb_checkpoints
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
 .env
+venv/
+ENV/
+env.bak/
+venv.bak/
