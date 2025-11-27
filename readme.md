@@ -1,4 +1,5 @@
 # Soko Predicts
+LIVE LINK: https://soko-predicts-2.onrender.com/
 
 An AI-powered platform designed to combat price volatility for smallholder farmers in Kenya by delivering accurate, localized price and demand forecasts via accessible channels.
 
